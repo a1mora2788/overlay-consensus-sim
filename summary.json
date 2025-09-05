@@ -1,0 +1,8 @@
+{
+  "nodes_start": 100,
+  "epochs": 200,
+  "blocks_produced": 96,
+  "cum_overlay_energy": 907400,
+  "cum_pow_energy": 96000,
+  "overlay_vs_pow_ratio": 9.452083333333333
+}
