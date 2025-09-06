@@ -1,10 +1,3 @@
-Perfect 👍 let’s give your repo the **full professional README** so it looks serious to professors, dev funds, and collaborators.
-
-Here’s the long version you can paste into your `README.md`:
-
----
-
-````markdown
 # 🌍 Overlay Consensus Simulator
 
 An **energy-aware blockchain consensus simulator** comparing **Overlay Consensus** with traditional **Proof of Work (PoW)**.  
