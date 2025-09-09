@@ -88,3 +88,12 @@ We welcome contributions from:
 📩 Contact: [@a1mora2788](https://github.com/a1mora2788)
 
 
+---
+
+### Trademark Notice  
+
+© 2025 Angel Mora · **EAC™**, **EACPO™**, and the **EACPO logo™** are claimed trademarks of Angel Mora.  
+
+The source code of this project is licensed under the MIT License. However, the project names **EAC** and **EACPO**, along with the logo, are not part of that open source license.  
+
+Use of the names or logo is permitted only for descriptive reference (e.g., “compatible with EACPO”). Any use suggesting official affiliation, endorsement, or authorship requires prior permission.
