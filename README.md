@@ -1,99 +1,72 @@
-# 🌍 Overlay Consensus Simulator
+# EACPO — Energy-Aware Blockchain Website
 
-An **energy-aware blockchain consensus simulator** comparing **Overlay Consensus** with traditional **Proof of Work (PoW)**.  
-This project demonstrates how Overlay Consensus can reduce blockchain energy use by ~66% while maintaining block production.
+![EACPO Website Screenshot](./screenshot.png)
 
----
+This is the landing page for **EACPO overlay consensus**, showcasing research results and promoting energy-aware blockchain design.
 
-## ✨ Key Findings
-- Overlay Consensus uses **~591 units** of energy vs PoW’s **~1748 units** over 200 epochs  
-- **~66% energy savings** while maintaining security and throughput  
-- Overlay = **~34% of PoW energy consumption**  
+## Features
+- ⚡ Overlay consensus: ~66% less energy than Proof-of-Work while preserving security.
+- 📊 Live simulation graphs (overlay vs PoW energy ratio and cumulative energy).
+- 🌱 Built with React, Vite, Tailwind CSS, and Framer Motion.
+- 🔒 Icons with graceful fallbacks for resilience.
 
----
-
-## 🚀 Quick Start
-
-### Requirements
-- [Go](https://go.dev/doc/install) (>=1.20)  
-- [Python](https://www.python.org/downloads/) (>=3.9)  
-- Python packages: `pandas`, `matplotlib`
-
-Install Python dependencies:
-```bash
-pip install pandas matplotlib
-````
-
-### Run Simulation (Go)
-
-```bash
-go run overlay_sim.go > summary.json
+## Project Structure
+```
+├── index.html
+├── package.json
+├── postcss.config.js
+├── tailwind.config.js
+├── vite.config.js
+├── public/
+│   └── media/
+│       ├── overlay_vs_pow.png
+│       ├── cumulative_energy.png
+│       ├── live_graph.gif
+│       └── live_graph.mp4
+├── screenshot.png
+└── src/
+    ├── index.css
+    ├── main.jsx
+    └── Page.jsx
 ```
 
-Generates:
+## Getting Started
 
-* `per_epoch_results.csv` — per-epoch data
-* `summary.json` — summary metrics
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-### Generate Plots (Python)
+2. **Run the dev server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-```bash
-python3 overlay_model.py --windows 5 10 20
-```
+3. **Build for production**
+   ```bash
+   npm run build
+   npm run preview
+   ```
 
-Generates:
+## Adding Media
+- Place your generated graphs and animations in `public/media/`.
+- Default file names expected:
+  - `overlay_vs_pow.png`
+  - `cumulative_energy.png`
+  - `live_graph.gif`
+  - `live_graph.mp4` (optional, generated with ffmpeg)
 
-* `per_epoch_results_with_ratios.csv`
-* `overlay_vs_pow.png`
-* `overlay_vs_pow.pdf`
+If files are missing, the site gracefully falls back to text placeholders or the GIF instead of MP4.
 
----
+## Deployment
+- Push this repo to GitHub.
+- Deploy directly on [Vercel](https://vercel.com) or [Netlify](https://www.netlify.com). Both auto-detect Vite projects.
+- Your public site will be live within minutes.
 
-## 📊 Outputs
-
-### CSV Data
-
-* `per_epoch_results.csv` — raw results
-* `per_epoch_results_with_ratios.csv` — with smoothed ratios
-
-### Charts
-
-* `overlay_vs_pow.png` — energy ratio chart (pitch-ready)
-* `overlay_vs_pow.pdf` — publication-ready version
-
-### Reports
-
-* `EACPO_report.pdf` — technical report
-* `overlay_pitch_deck_university.pdf` — presentation deck
-* `overlay_executive_summary.pdf` — 1-page summary
-* `overlay_infographic.pdf` — visual handout
-* `overlay_research_summary.pdf` — research abstract
+## License
+Open-source, MIT/Apache friendly. Contributions welcome!
 
 ---
 
-## 📜 License
-
-Released under the [MIT License](LICENSE).
-
----
-
-## 🤝 Collaboration
-
-We welcome contributions from:
-
-* **Universities & research labs** — scaling, publishing, validation
-* **Blockchain developer funds** — Bitcoin Development Fund, Ethereum Foundation, Climate Collective
-* **Students & open-source contributors** — hackathons, research projects, experiments
-
-📩 Contact: [@a1mora2788](https://github.com/a1mora2788)
-
----
-
-## 🛡️ Trademark Notice  
-
-© 2025 Angel Mora · **EAC™**, **EACPO™**, and the **EACPO logo™** are claimed trademarks of Angel Mora.  
-
-The source code of this project is licensed under the MIT License. However, the project names **EAC** and **EACPO**, along with the logo, are not part of that open source license.  
-
-Use of the names or logo is permitted only for descriptive reference (e.g., “compatible with EACPO”). Any use suggesting official affiliation, endorsement, or authorship requires prior permission.
-
+Built with ❤️ to make blockchain greener and smarter.
