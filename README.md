@@ -1,3 +1,4 @@
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/a1mora2788/overlay-consensus-sim)
 # EACPO — Energy-Aware Blockchain Website
 
 ![EACPO Website Screenshot](./screenshot.png)
@@ -68,5 +69,6 @@ If files are missing, the site gracefully falls back to text placeholders or the
 Open-source, MIT/Apache friendly. Contributions welcome!
 
 ---
+
 
 Built with ❤️ to make blockchain greener and smarter.
