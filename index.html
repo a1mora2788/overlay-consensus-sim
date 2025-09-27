@@ -2,11 +2,537 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Overlay Consensus Simulation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EACPO — Energy-Aware Consensus</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        --bg: #040715;
+        --bg-soft: #060b24;
+        --bg-raised: rgba(13, 23, 42, 0.72);
+        --border: rgba(148, 163, 184, 0.18);
+        --muted: rgba(148, 163, 184, 0.75);
+        --primary: #38bdf8;
+        --primary-strong: #0ea5e9;
+        --accent: #34d399;
+        --accent-soft: rgba(52, 211, 153, 0.12);
+        --radius-xl: 28px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 45%),
+          radial-gradient(circle at top right, rgba(52, 211, 153, 0.16), transparent 42%), var(--bg);
+        color: #f8fafc;
+        display: flex;
+        justify-content: center;
+        padding: clamp(32px, 5vw, 56px) clamp(16px, 6vw, 80px) 96px;
+      }
+
+      main {
+        width: min(1200px, 100%);
+        display: grid;
+        gap: clamp(56px, 9vw, 96px);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 32px;
+      }
+
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+        font-size: 1.05rem;
+      }
+
+      .logo-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: 0 0 22px rgba(56, 189, 248, 0.7);
+      }
+
+      nav ul {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        color: var(--muted);
+      }
+
+      nav a {
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: color 0.2s ease;
+      }
+
+      nav a:hover,
+      nav a:focus-visible {
+        color: #e2e8f0;
+      }
+
+      .cta { display: flex; align-items: center; gap: 12px; }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 22px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border: 1px solid transparent;
+        text-decoration: none;
+        transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        cursor: pointer;
+      }
+
+      .btn.primary {
+        background: linear-gradient(120deg, var(--primary-strong), var(--primary));
+        color: #0b1120;
+        box-shadow: 0 22px 40px rgba(14, 165, 233, 0.35);
+      }
+
+      .btn.primary:hover,
+      .btn.primary:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 26px 50px rgba(14, 165, 233, 0.42);
+      }
+
+      .btn.ghost {
+        border-color: rgba(148, 163, 184, 0.3);
+        background: rgba(15, 23, 42, 0.55);
+        color: #e2e8f0;
+      }
+
+      .btn.ghost:hover,
+      .btn.ghost:focus-visible {
+        border-color: rgba(148, 163, 184, 0.5);
+        background: rgba(15, 23, 42, 0.75);
+      }
+
+      header.hero {
+        display: grid;
+        gap: clamp(40px, 6vw, 56px);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 28px;
+        height: 1px;
+        background: var(--accent);
+        opacity: 0.6;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.7rem, 5vw, 3.9rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      .hero p {
+        margin: 20px 0 0;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: var(--muted);
+      }
+
+      .metrics {
+        margin-top: clamp(32px, 4vw, 48px);
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .metric-card {
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        padding: 20px 22px;
+        background: rgba(12, 20, 38, 0.55);
+        display: grid;
+        gap: 12px;
+      }
+
+      .metric-card span {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .metric-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .hero-figure {
+        position: relative;
+        border-radius: var(--radius-xl);
+        padding: clamp(18px, 3vw, 26px);
+        background: var(--bg-raised);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        backdrop-filter: blur(24px);
+        box-shadow: 0 40px 90px rgba(15, 23, 42, 0.45);
+        display: grid;
+        gap: 18px;
+      }
+
+      .hero-figure::before {
+        content: "";
+        position: absolute;
+        inset: 16px;
+        border-radius: calc(var(--radius-xl) - 12px);
+        background: linear-gradient(140deg, rgba(56, 189, 248, 0.12), rgba(52, 211, 153, 0.05));
+        pointer-events: none;
+      }
+
+      .hero-figure img {
+        width: 100%;
+        border-radius: 18px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-figure footer {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.78rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      section {
+        display: grid;
+        gap: clamp(20px, 3vw, 32px);
+      }
+
+      section header h2 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+        letter-spacing: -0.015em;
+      }
+
+      section header p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        max-width: 58ch;
+        line-height: 1.7;
+      }
+
+      .feature-grid {
+        display: grid;
+        gap: 22px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .feature-card {
+        padding: 26px;
+        border-radius: 22px;
+        border: 1px solid var(--border);
+        background: rgba(9, 16, 31, 0.7);
+        display: grid;
+        gap: 12px;
+      }
+
+      .feature-card h3 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .feature-card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      .paid-banner {
+        display: grid;
+        gap: 20px;
+        border-radius: var(--radius-xl);
+        padding: clamp(24px, 4vw, 40px);
+        border: 1px solid rgba(56, 189, 248, 0.24);
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(15, 23, 42, 0.9));
+        box-shadow: 0 30px 70px rgba(14, 165, 233, 0.24);
+      }
+
+      .paid-banner strong {
+        font-size: clamp(1.6rem, 3vw, 2.1rem);
+        letter-spacing: -0.01em;
+      }
+
+      .paid-features {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .paid-card {
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        background: rgba(7, 12, 26, 0.82);
+        padding: 22px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .paid-card h3 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+
+      .paid-card ul {
+        padding-left: 18px;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .gallery {
+        display: grid;
+        gap: 24px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      figure {
+        margin: 0;
+        background: rgba(10, 18, 33, 0.8);
+        border-radius: 22px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        display: grid;
+        gap: 14px;
+      }
+
+      figure img {
+        width: 100%;
+        border-radius: 14px;
+        object-fit: cover;
+      }
+
+      figcaption {
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+
+      footer.site-footer {
+        text-align: center;
+        color: rgba(148, 163, 184, 0.6);
+        font-size: 0.88rem;
+        padding-top: 12px;
+      }
+
+      @media (max-width: 640px) {
+        nav { flex-direction: column; align-items: flex-start; }
+        .cta { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Overlay Consensus Simulation</h1>
-    <p>This is a static placeholder page served from Vercel.</p>
-    <img src="overlay_vs_pow.png" alt="Overlay vs PoW Energy Plot" />
+    <main>
+      <nav>
+        <a class="logo" href="#home">
+          <span class="logo-dot" aria-hidden="true"></span>
+          EACPO Overlay
+        </a>
+        <ul aria-label="Primary navigation">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#features">Why Overlay</a></li>
+          <li><a href="#visuals">Energy Visuals</a></li>
+          <li><a href="#pricing">Paid</a></li>
+        </ul>
+        <div class="cta">
+          <a class="btn ghost" href="overlay_vs_pow.pdf" target="_blank" rel="noopener noreferrer">Download paper</a>
+          <a class="btn primary" href="https://github.com/a1mora2788/overlay-consensus-sim" target="_blank" rel="noopener noreferrer">Launch console</a>
+        </div>
+      </nav>
+
+      <header id="overview" class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Vercel home — Paid tier preview</span>
+          <h1>Ship sustainable overlay networks without sacrificing velocity.</h1>
+          <p>
+            Overlay consensus keeps energy budgets predictable while preserving the developer ergonomics teams expect from Vercel. Track live energy metrics, automate regional rollouts, and deploy research simulators in minutes.
+          </p>
+          <div class="cta" style="margin-top: 24px; flex-wrap: wrap;">
+            <a class="btn primary" href="https://vercel.com/pricing" target="_blank" rel="noopener noreferrer">Explore paid plans</a>
+            <a class="btn ghost" href="#visuals">View live metrics</a>
+          </div>
+          <div class="metrics">
+            <article class="metric-card">
+              <span>66% less</span>
+              <p>Energy consumed compared with Proof-of-Work miners across the latest 1,000 epochs.</p>
+            </article>
+            <article class="metric-card">
+              <span>200 nodes</span>
+              <p>Active overlay validators, auto-balanced across energy-efficient regions.</p>
+            </article>
+            <article class="metric-card">
+              <span>2.1 tCO₂</span>
+              <p>Estimated annual carbon reduction for a fleet that migrates to Overlay.</p>
+            </article>
+          </div>
+        </div>
+        <aside class="hero-figure" aria-labelledby="overlay-heatmap">
+          <img src="active_nodes.png" alt="Heatmap showing evenly distributed active overlay nodes" />
+          <footer>
+            <span id="overlay-heatmap" class="chip">Active overlay map</span>
+            <span>Realtime cluster visibility &bull; 15s refresh</span>
+          </footer>
+        </aside>
+      </header>
+
+      <section id="features">
+        <header>
+          <h2>Why teams upgrade to the paid overlay experience</h2>
+          <p>
+            Unlock dedicated regions, deeper observability, and automated remediation workflows tuned for energy-aware consensus. Crafted with the same care as the Vercel platform you already trust for production shipping.
+          </p>
+        </header>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Dedicated overlay regions</h3>
+            <p>Scale across low-carbon zones with managed failover policies and automatic cost controls.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Zero-friction observability</h3>
+            <p>Rich dashboards surface latency, energy burn rate, and throughput targets in a single timeline.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Secure smart deployments</h3>
+            <p>Role-based approvals, signed workloads, and verifiable randomness keep security uncompromised.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Integrations that work</h3>
+            <p>Connect GitHub, Linear, and data warehouses to automate checks before each production cutover.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="pricing" class="paid-banner" aria-labelledby="paid-tier">
+        <strong id="paid-tier">Paid tier built for scale</strong>
+        <p>
+          Upgrade when your research team is ready for guaranteed capacity, custom SLAs, and white-glove support from Overlay engineers.
+        </p>
+        <div class="paid-features">
+          <article class="paid-card">
+            <h3>Included in paid</h3>
+            <ul>
+              <li>Private overlay edges with geo-fencing</li>
+              <li>Energy anomaly detection alerts</li>
+              <li>99.9% uptime objective with dedicated support</li>
+            </ul>
+          </article>
+          <article class="paid-card">
+            <h3>Optional add-ons</h3>
+            <ul>
+              <li>Managed carbon reporting API</li>
+              <li>On-premise secure relay deployments</li>
+              <li>24/7 war room for regulatory audits</li>
+            </ul>
+          </article>
+          <article class="paid-card">
+            <h3>Getting started</h3>
+            <ul>
+              <li>Custom onboarding and migration playbooks</li>
+              <li>90-day co-design sprint with Overlay architects</li>
+              <li>Access to roadmap previews and betas</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="visuals">
+        <header>
+          <h2>Energy visuals your leadership can understand</h2>
+          <p>
+            Shareable dashboards keep sustainability stakeholders aligned. Export snapshots or stream the live feed directly into the Vercel analytics workspace.
+          </p>
+        </header>
+        <div class="gallery" role="list">
+          <figure role="listitem">
+            <img src="overlay_vs_pow.png" alt="Line chart comparing overlay and Proof-of-Work energy usage over time" />
+            <figcaption>Overlay consensus keeps energy ratios predictable, even as validator count scales.</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="cumulative_energy.png" alt="Cumulative energy comparison between overlay and Proof-of-Work" />
+            <figcaption>Cumulative energy stays within budget while Proof-of-Work continues to spike upward.</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="energy_comparison.png" alt="Bar chart contrasting overlay and Proof-of-Work energy usage" />
+            <figcaption>Breakdown by phase highlights how overlay prunes redundant work and idle draw.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        Simulation data © EACPO Overlay Consensus Initiative — deploy sustainably with Vercel paid overlays.
+      </footer>
+    </main>
   </body>
 </html>
