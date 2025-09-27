@@ -1,1 +1,6 @@
-# See .gitignore for excluded files
+# Ignore generated assets and local OS cruft
+node_modules/
+dist/
+
+# macOS Finder metadata
+.DS_Store
